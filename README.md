@@ -31,6 +31,8 @@ INSERT INTO users (username, password) VALUES ('admin', 'password123');
 - **Skenario Mitigasi:** Pada `login_secure.php`, penggunaan *Prepared Statements* memastikan input pengguna diperlakukan sebagai data (literal), bukan perintah eksekusi SQL.
 
 - ![Hasil Serangan](Screenshots/Screenshot(468).png)
+- ![Hasil Serangan](Screenshots/Screenshot(466).png)
+- ![Hasil Serangan](Screenshots/Screenshot(467).png)
 
 ## Informasi Penulis
 - **Nama:** Rafi Ubaydillah
