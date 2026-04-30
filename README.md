@@ -1,31 +1,45 @@
-# UTS-PemWeb
-SQL INJECTION
+# UTS Pemrograman Web - Analisis SQL Injection
 
-1. Mekanisme Serangan SQL Injection
-SQL Injection (SQLi) adalah teknik serangan di mana penyerang menyisipkan perintah SQL berbahaya ke dalam kolom input aplikasi untuk memanipulasi kueri database.
+Repositori ini berisi dokumentasi dan implementasi eksperimen keamanan web mengenai **SQL Injection (SQLi)** sebagai pemenuhan tugas UTS mata kuliah Pemrograman Web 2.
 
-Dalam eksperimen ini, saya menggunakan skrip login_vulnerable.php. Kueri yang digunakan pada skrip tersebut adalah:
-$sql = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
+## Deskripsi Proyek
+Proyek ini mendemonstrasikan bagaimana kerentanan *SQL Injection* dapat terjadi pada sistem autentikasi PHP dan MySQL, serta bagaimana cara memitigasinya menggunakan *Prepared Statements*. Eksperimen dilakukan dengan membandingkan dua implementasi form login: yang rentan (*vulnerable*) dan yang aman (*secure*).
 
-Ketika saya memasukkan payload ' OR 1=1 # pada kolom username, database menerima instruksi yang berubah menjadi:
-SELECT * FROM users WHERE username = '' OR 1=1 # AND password = '...'
+## Struktur Repositori
+- `koneksi.php` : Konfigurasi koneksi database.
+- `login_vulnerable.php` : Skrip login yang sengaja dibuat rentan terhadap SQLi.
+- `login_secure.php` : Skrip login yang sudah dimitigasi menggunakan *Prepared Statements*.
 
-Tanda petik (') menutup field username secara prematur.
+## Konfigurasi Database
+Untuk menjalankan proyek ini, pastikan Anda telah membuat database dengan detail berikut:
 
-Perintah OR 1=1 menciptakan kondisi yang selalu bernilai TRUE, sehingga sistem dipaksa menganggap input tersebut benar tanpa memeriksa kata sandi.
+1. Buat database baru bernama `db_uts_pemweb`.
+2. Jalankan query berikut untuk membuat tabel:
 
-Simbol # berfungsi sebagai operator komentar di MySQL, yang memerintahkan database untuk mengabaikan sisa perintah setelahnya (termasuk pengecekan password).
+```sql
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL,
+    password VARCHAR(50) NOT NULL
+);
 
-2. Hasil Eksperimen
-Berdasarkan pengujian, sistem yang rentan berhasil ditembus dan memberikan pesan "Login Berhasil!" meskipun password yang dimasukkan salah. Hal ini membuktikan bahwa validasi input sangat krusial dalam keamanan web.
+INSERT INTO users (username, password) VALUES ('admin', 'password123');
+```
 
-3. Implementasi Mitigasi dengan Prepared Statements
-Untuk mengatasi kerentanan ini, saya mengimplementasikan Prepared Statements pada skrip login_secure.php. Teknik ini bekerja dengan cara memisahkan struktur kueri dari data input.
+## Mekanisme Eksperimen
+- **Skenario Serangan:** Pada `login_vulnerable.php`, input `' OR 1=1 #` digunakan untuk memanipulasi kueri SQL dan melewati autentikasi.
+- **Skenario Mitigasi:** Pada `login_secure.php`, penggunaan *Prepared Statements* memastikan input pengguna diperlakukan sebagai data (literal), bukan perintah eksekusi SQL.
 
-PHP
-// Kode Mitigasi (Prepared Statement)
-$stmt = $conn->prepare("SELECT * FROM users WHERE username = ? AND password = ?");
-$stmt->bind_param("ss", $username, $password);
-$stmt->execute();
-Dengan cara ini, input penyerang seperti ' OR 1=1 # tidak lagi dianggap sebagai perintah SQL, melainkan hanya dianggap sebagai sebuah string teks biasa yang dicari di dalam database. Hasilnya, sistem tetap menolak akses karena tidak ditemukan user dengan username yang mengandung karakter tersebut.
+- ![Hasil Serangan](images/Screenshot%20(468).png)
 
+## Informasi Penulis
+- **Nama:** Rafi Ubaydillah
+- **NIM:** 312410542
+- **Kelas:** I241E
+- **Mata Kuliah:** Pemrograman Web 2
+- **Dosen Pengampu:** Agung Nugroho, S.Kom., M.Kom.
+- **Institusi:** Universitas Pelita Bangsa
+
+---
+*Dibuat untuk keperluan tugas UTS mata kuliah Pemrograman Web 2.*
+```
