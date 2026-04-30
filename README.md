@@ -30,7 +30,7 @@ INSERT INTO users (username, password) VALUES ('admin', 'password123');
 - **Skenario Serangan:** Pada `login_vulnerable.php`, input `' OR 1=1 #` digunakan untuk memanipulasi kueri SQL dan melewati autentikasi.
 - **Skenario Mitigasi:** Pada `login_secure.php`, penggunaan *Prepared Statements* memastikan input pengguna diperlakukan sebagai data (literal), bukan perintah eksekusi SQL.
 
-- ![Hasil Serangan](images/Screenshot%20(468).png)
+- ![Hasil Serangan](Screenshots/Screenshot(468).png)
 
 ## Informasi Penulis
 - **Nama:** Rafi Ubaydillah
